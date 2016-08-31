@@ -1,0 +1,97 @@
+{
+	"pluginDetails": {
+		"pluginId": "teradata-ingestion",
+		"name": "teradata-data-ingestion",
+		"description": "This plugin is to ingest csv data in teradata table",
+		"version": "1.0.0",
+		"author": "bdreuser",
+		"pluginWebsite": "www.google.com",
+		"uninstallable": true
+	},
+	"pluginDependency": [{
+
+		"pluginId": "bdre-min",
+		"version": "1",
+		"versionLevel": "1"
+	}],
+	"pluginConfig":[{
+
+		"configGroup": "navigation",
+		"key": "Data Ingestion",
+		"value": "{ \"label\": \"Teradata Ingestion\",   \"collapse\": \"1\",   \"url\": \"teradataingestion.page\", \"children\": [] }"
+	},{
+
+		"configGroup": "navigation",
+		"key": "Job Management",
+		"value": "{ \"label\": \"Upload file in Teradata\",   \"collapse\": \"1\",   \"url\": \"tdfileupload.page\", \"children\": [] }"
+	},{
+
+		"configGroup": "41.execute-script",
+		"key": "execute-script",
+		"value": "tdimport.sh"
+	}],
+	"install": {
+		"fs": [{
+
+			"action": "FILECOPY",
+			"sourceLocation": "files/scripts/process-type-41.sh",
+			"destinationLocation": "bdre/bdre-scripts/deployment/process-type-41.sh",
+			"permission": "777",
+			"copy": true
+		},{
+			"action": "FILECOPY",
+			"sourceLocation": "files/scripts/tdimport.sh",
+			"destinationLocation": "bdre/bdre-scripts/execution/tdimport.sh",
+			"permission": "777",
+			"copy": true
+		},{
+			"action": "FILECOPY",
+			"sourceLocation": "files/scripts/file-loader-remote.sh",
+			"destinationLocation": "bdre/bdre-scripts/execution/file-loader-remote.sh",
+			"permission": "777",
+			"copy": true
+		},{
+			"action": "FILECOPY",
+			"sourceLocation": "files/lib/teradata-ingestion-1.0-SNAPSHOT-executable.jar",
+			"destinationLocation": "bdre/lib/teradata-ingestion/teradata-ingestion-1.0-SNAPSHOT-executable.jar",
+			"permission": "777",
+			"copy": true
+		}],
+		"metadata": {
+			"insert": [{
+				"tableName": "PROCESS_TYPE",
+				"data": [
+					["41", "Teradata Ingestion Parent", "NULL"],
+					["42", "Teradata Ingestion", "41"]
+				]
+			},{
+				"tableName": "GENERAL_CONFIG",
+				"data": [
+					["teradata.username","EDW_ENV1 - Username", "Username","EDW_ENV1","1","tduser", "text" , "1"],
+					["teradata.password","EDW_ENV1 - Password", "Password","EDW_ENV1","1","zaq1xsw2", "text" , "1"],
+					["teradata.tdpid","EDW_ENV1 - TDPID", "TDPID","EDW_ENV1","1","localhost", "text" , "1"]
+				]
+			}],
+			"update": {
+				"tableName": "",
+				"data": [
+				]
+
+			},
+			"delete": {
+				"tableName": "",
+				"data": [
+				]
+
+			}
+		},
+		"uiWar": {
+			"location":"files/webapp/td-md-ui-1.0-SNAPSHOT.war"
+
+		},
+		"restWar": {
+			"location":"files/webapp/td-md-rest-api-1.0-SNAPSHOT.war"
+		}
+
+	}
+}
